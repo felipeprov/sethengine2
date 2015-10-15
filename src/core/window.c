@@ -5,11 +5,13 @@
 #include "window.h"
 
 static LIST_HEAD(window_head);
+static struct window_module* active_window;
 
 int window_register(struct window_module* window)
 {
 	printf("Added %s\n", window->name);
 	list_add_tail(&window->list, &window_head);
+	active_window = window;
 
 	return 0;
 }
@@ -24,4 +26,15 @@ void window_print_available()
 		struct window_module* tmp = list_entry(pos, struct window_module, list);
 		printf("%d - %s\n", i++, tmp->name);
 	}
+}
+
+void window_start(struct window_properties prop)
+{
+	active_window->properties = prop;
+	active_window->init(active_window);
+}
+
+void window_update(float dt)
+{
+	active_window->update(active_window, dt);
 }
