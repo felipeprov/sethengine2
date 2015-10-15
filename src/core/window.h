@@ -8,6 +8,7 @@ struct window_properties;
 
 typedef int (*wd_init)(struct window_module* module);
 typedef int (*wd_update)(struct window_module* module, float dt);
+typedef int (*wd_render)(struct window_module* module);
 
 /**
  * @brief      Window properties
@@ -29,6 +30,7 @@ struct window_module{
 	const char* name;
 	wd_init init;
 	wd_update update;
+	wd_render render;
 	struct window_properties properties;
 	void *data;
 };
@@ -36,5 +38,8 @@ struct window_module{
 int window_register(struct window_module* window);
 void window_print_available();
 void window_start(struct window_properties prop);
-void window_update(float dt);
+int window_update(float dt);
+int window_render(void);
+
+void window_loop(void);
 #endif

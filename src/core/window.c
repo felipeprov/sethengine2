@@ -34,7 +34,22 @@ void window_start(struct window_properties prop)
 	active_window->init(active_window);
 }
 
-void window_update(float dt)
+int window_update(float dt)
 {
-	active_window->update(active_window, dt);
+	return active_window->update(active_window, dt);
+}
+
+int window_render(void)
+{
+	return active_window->render(active_window);
+}
+
+void window_loop(void)
+{
+	int rc;
+	do
+	{
+		window_render();
+		rc = window_update(100);
+	}while(rc == 0);
 }

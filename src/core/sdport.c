@@ -15,7 +15,7 @@ static int sdl_window_init(struct window_module* module)
 	struct sdl_vars* vars = (struct sdl_vars*)malloc(sizeof(struct sdl_vars));
 	struct window_properties prop = module->properties;
 
-	module->data = vars;
+	(module->data) = vars;
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0){
 		printf("SDL init error %d \n", SDL_GetError());
@@ -44,15 +44,29 @@ static int sdl_window_init(struct window_module* module)
 
 static int sdl_window_update(struct window_module* module, float dt)
 {
-	SDL_Delay(1000);
+	SDL_Event e;
+	while (SDL_PollEvent(&e)){
+		if(e.type == SDL_QUIT)
+			return -1;
+	}
 
 	return 0;
 }
 
+static int sdl_window_render(struct window_module* module)
+{
+	struct sdl_vars* vars = (struct sdl_vars*)module->data;
+	SDL_RenderClear(vars->ren);
+	SDL_RenderPresent(vars->ren);
+
+	return  0;
+}
+
 struct window_module sdport={
-	.name = "SDL Port",
+	.name = "SDL",
 	.init = sdl_window_init,
-	.update = sdl_window_update
+	.update = sdl_window_update,
+	.render = sdl_window_render
 };
 
 void sdl_init(void)
