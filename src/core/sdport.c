@@ -1,13 +1,42 @@
 
+#include <stdio.h>
 #include "list.h"
 #include "window.h"
-#include <stdio.h>
+#include "resources.h"
 
 #include <SDL.h>
 
 struct sdl_vars{
 	SDL_Window* win;
 	SDL_Renderer* ren;
+};
+
+struct sdl_img{
+	struct resource res;
+	SDL_Texture *tex;
+	struct sdl_vars* vars;
+};
+
+
+static int sdl_window_init(struct window_module* module);
+static int sdl_window_update(struct window_module* module, float dt);
+static int sdl_window_render(struct window_module* module);
+static struct resource* sdl_load_bmp(struct resource_loader* load, const char* path);
+static int sdl_bmp_process(struct resource* res);
+
+static struct window_module sdport={
+	.name = "SDL",
+	.init = sdl_window_init,
+	.update = sdl_window_update,
+	.render = sdl_window_render,
+};
+
+static struct resource_loader sdl_bmp_loader=
+{
+	.name = "BMP Loader",
+	.ext = "bmp",
+	.load = sdl_load_bmp,
+	.process = sdl_bmp_process
 };
 
 static int sdl_window_init(struct window_module* module)
@@ -38,7 +67,9 @@ static int sdl_window_init(struct window_module* module)
 
 	vars->win = win;
 	vars->ren = ren;
+	sdl_bmp_loader.data = vars;
 
+	resource_loader_register(&sdl_bmp_loader);
 	return 0;
 }
 
@@ -62,12 +93,36 @@ static int sdl_window_render(struct window_module* module)
 	return  0;
 }
 
-struct window_module sdport={
-	.name = "SDL",
-	.init = sdl_window_init,
-	.update = sdl_window_update,
-	.render = sdl_window_render
-};
+/** BMP Loader **/
+static struct resource* sdl_load_bmp(struct resource_loader* load, const char* path)
+{
+	struct sdl_vars* vars = (struct sdl_vars*)(load->data);
+	SDL_Surface *bmp = SDL_LoadBMP(path);
+	if (bmp == NULL){
+		return 0;
+	}
+
+	SDL_Texture *tex = SDL_CreateTextureFromSurface(vars->ren, bmp);
+	SDL_FreeSurface(bmp);
+	if (tex == NULL){
+		return 0;
+	}
+
+	struct sdl_img* img = (struct sdl_img*)malloc(sizeof(struct sdl_img));
+	img->tex = tex;
+	img->vars = vars;
+
+	return &img->res;
+}
+
+static int sdl_bmp_process(struct resource* res)
+{
+	struct sdl_img* img = container_of(res, struct sdl_img, res);
+	SDL_RenderCopy(img->vars->ren, img->tex, NULL, NULL);
+
+	return 0;
+}
+
 
 void sdl_init(void)
 {

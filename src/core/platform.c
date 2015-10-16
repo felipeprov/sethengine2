@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define CONFIG_SDL_PORT
 /***************** Prototypes ********************/
 #ifdef CONFIG_SDL_PORT
 void sdl_init();

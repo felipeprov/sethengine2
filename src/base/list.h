@@ -184,6 +184,9 @@ static inline void list_splice_init(struct list_head *list,
 	}
 }
 
+#define container_of(ptr, type, member) \
+	((type *)((char *)(ptr)-(unsigned long)(&((type *)0)->member)))
+
 /**
  * list_entry - get the struct for this entry
  * @ptr:	the &struct list_head pointer.
