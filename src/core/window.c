@@ -52,13 +52,3 @@ int window_render(void)
 
 	return active_window->render(active_window);
 }
-
-void window_loop(void)
-{
-	int rc;
-	do
-	{
-		window_render();
-		rc = window_update(100);
-	}while(rc == 0);
-}

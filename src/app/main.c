@@ -17,7 +17,8 @@ int main(int argc, char* argv[])
 {
 	platform_init();
 	window_start(prop);
-	window_loop();
+
+	platform_loop();
 
 	return 0;
 }
