@@ -5,7 +5,7 @@
 
 /***************** Prototypes ********************/
 #ifdef CONFIG_SDL_PORT
-void sdl_init();
+void sdl_init(void);
 #endif
 
 void lua_init(void);
@@ -15,7 +15,10 @@ struct platform_init {
 	void (*function)(void);
 };
 
-void platform_init()
+/*
+ * platform_init  - entry point for all engine
+ */
+void platform_init(void)
 {
 	struct platform_init m_platform[] =
 	{
@@ -39,6 +42,9 @@ void platform_init()
 	}
 }
 
+/*
+ * platform_loop - after evertything is initiated, lets work
+ */
 void platform_loop(void)
 {
 	int rc;

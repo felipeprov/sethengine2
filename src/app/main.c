@@ -3,7 +3,8 @@
 #include "window.h"
 
 
-void platform_init();
+void platform_init(void);
+void platform_loop(void);
 
 struct window_properties prop = {
 	"SethEngine",
