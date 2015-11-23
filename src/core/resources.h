@@ -32,5 +32,6 @@ struct resource_loader
 void resource_loader_register(struct resource_loader* loader);
 void resource_process(struct resource* res);
 struct resource* resource_load(const char* filename);
+void resource_print(void);
 
 #endif

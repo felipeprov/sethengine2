@@ -1,5 +1,7 @@
 #include "resources.h"
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 static LIST_HEAD(resource_loader_head);
 static LIST_HEAD(resources_head);
@@ -15,7 +17,8 @@ static const char* get_extension(const char* path)
 
 void resource_loader_register(struct resource_loader* loader)
 {
-	list_add_tail(&loader->list, &loader->list);
+	printf("Register %s\n", loader->name);
+	list_add_tail(&loader->list, &resource_loader_head);
 }
 
 void resource_process(struct resource* res)
@@ -46,4 +49,16 @@ struct resource* resource_load(const char* filename)
 	}
 
 	return NULL;
+}
+
+void resource_print(void)
+{
+	struct list_head *pos;
+	
+	list_for_each(pos, &resource_loader_head)
+	{
+		struct resource_loader* tmp = list_entry(pos, struct resource_loader, list);
+
+		printf("Loader %s (%s) \n", tmp->name, tmp->ext);
+	}
 }
