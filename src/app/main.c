@@ -3,7 +3,6 @@
 #include "window.h"
 #include "resources.h"
 
-
 void platform_init(void);
 void platform_loop(void);
 

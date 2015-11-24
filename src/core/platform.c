@@ -15,6 +15,8 @@ struct platform_init {
 	void (*function)(void);
 };
 
+void entity_init(void);
+void core_components_init(void);
 /*
  * platform_init  - entry point for all engine
  */
@@ -30,6 +32,8 @@ void platform_init(void)
 
 ///////// Secondary   //////////////////////////////
 		{.name = "Lua Module", .function = lua_init},
+		{.name = "Entity", .function = entity_init},
+		{.name = "Core Components", .function = core_components_init},
 		{0, 0}
 	};
 
