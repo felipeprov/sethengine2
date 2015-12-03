@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "window.h"
+#include "system.h"
 
 /***************** Prototypes ********************/
 #ifdef CONFIG_SDL_PORT
@@ -44,6 +45,8 @@ void platform_init(void)
 		plat->function();
 		plat++;
 	}
+
+	system_init();
 }
 
 /*
@@ -54,6 +57,7 @@ void platform_loop(void)
 	int rc;
 	do
 	{
+		system_update(100);
 		window_render();
 		rc = window_update(100);
 	}while(rc == 0);
