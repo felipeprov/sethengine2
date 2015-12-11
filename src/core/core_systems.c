@@ -27,7 +27,7 @@ static int render_sys_update(struct system* system, float dt, struct system* arg
 		if(!entry->flags)
 		{
 			int ent = entry->component.parent_id;
-			entry->trans = entity_search_component(ent, "Transform");	
+			entry->trans = entity_search_component(ent, "Transform");
 			entry->image = entity_search_component(ent, "Image");	
 			entry->flags = 1;
 		}
@@ -47,9 +47,8 @@ static void* render_sys_alloc(struct system* system, int size)
 	struct render_sys_entry *entry = (struct render_sys_entry*)malloc(size);
 	memset(entry, 0, size);
 
-	return entry;
+	return &entry->component;
 }
-
 
 static struct system render=
 {
