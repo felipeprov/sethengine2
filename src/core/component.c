@@ -4,7 +4,6 @@
 #include "component.h"
 #include "entity.h"
 
-static LIST_HEAD(component_head);
 static LIST_HEAD(att_loader_head);
 
 static int component_new(void)
@@ -27,7 +26,7 @@ int component_register(const char* type, uint32_t size, int alloc_id)
 	return att->type;
 }
 
-int component_get(const char* type)
+int component_get_type(const char* type)
 {
 	struct list_head *pos;
 	list_for_each(pos, &att_loader_head)
@@ -41,4 +40,18 @@ int component_get(const char* type)
 	}
 
 	return -1;
+}
+
+struct component_template* component_get_template(const char* name)
+{
+	struct list_head* pos;
+	list_for_each(pos, &att_loader_head)
+	{
+		struct component_template* att = list_entry(pos, struct component_template, list);
+
+		if(strncmp(name, att->name, 32) == 0)
+		{
+			return att;
+		}
+	}
 }

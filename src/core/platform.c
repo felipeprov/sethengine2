@@ -18,6 +18,7 @@ struct platform_init {
 
 void entity_init(void);
 void core_components_init(void);
+int core_systems_init(void);
 /*
  * platform_init  - entry point for all engine
  */
@@ -30,11 +31,12 @@ void platform_init(void)
 #ifdef CONFIG_SDL_PORT
 		{.name = "SDL WINDOW", .function = sdl_init},
 #endif
-
+		{.name = "System", .function = system_init},
+		{.name = "Core Components", .function = core_components_init},
+		{.name = "Core Systems", .function = core_systems_init},
 ///////// Secondary   //////////////////////////////
 		{.name = "Lua Module", .function = lua_init},
 		{.name = "Entity", .function = entity_init},
-		{.name = "Core Components", .function = core_components_init},
 		{0, 0}
 	};
 

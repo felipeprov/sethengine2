@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "entity.h"
 #include "resources.h"
+#include "component.h"
 
 struct transform_component{
 	struct component comp;
