@@ -15,7 +15,6 @@ static void* default_alloc(struct system* sys, int size)
 static struct system default_system= 
 {
 	.name = "Default",
-	.alloc = default_alloc,
 };
 
 static int new_system_id(void)
@@ -64,25 +63,6 @@ int system_init(void)
 	}
 
 	return 0;
-}
-
-void* system_alloc_component(int id, int size)
-{
-	struct list_head *pos;
-	list_for_each(pos, &system_root)
-	{
-		struct system * sys = container_of(pos, struct system, next);
-		if(id == sys->id)
-		{
-			if(sys->alloc)
-			{
-				return sys->alloc(sys, size);
-			}
-		}
-	}
-
-	return 0;
-
 }
 
 int system_get_id(const char* name)

@@ -41,7 +41,7 @@ void platform_init(void)
 	};
 
 	struct platform_init *plat = m_platform;
-	while(plat->name != 0)
+    while(plat->name != 0)
 	{
 		printf("Starting the module %s \n", plat->name);
 		plat->function();

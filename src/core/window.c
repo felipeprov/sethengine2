@@ -19,8 +19,8 @@ int window_register(struct window_module* window)
 void window_print_available()
 {
 	struct list_head *pos;
-
 	int i = 0;
+    
 	list_for_each(pos, &window_head)
 	{
 		struct window_module* tmp = list_entry(pos, struct window_module, list);

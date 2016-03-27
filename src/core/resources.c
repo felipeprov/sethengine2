@@ -15,6 +15,12 @@ static const char* get_extension(const char* path)
 	return ext;
 }
 
+static int resource_new_uid(void)
+{
+	static int resource_counter= 0;
+	return resource_counter++;
+}
+
 void resource_loader_register(struct resource_loader* loader)
 {
 	printf("Register %s\n", loader->name);
@@ -26,7 +32,7 @@ void resource_process(struct resource* res)
 	res->loader->process(res);
 }
 
-struct resource* resource_load(const char* filename)
+int resource_load(const char* filename)
 {
 	struct list_head *pos;
 	const char* ext = get_extension(filename);
@@ -42,9 +48,10 @@ struct resource* resource_load(const char* filename)
 		{
 			struct resource* res = tmp->load(tmp, filename);
 			res->loader = tmp;
+			res->uid = resource_new_uid();
 
 			list_add_tail(&tmp->list, &resources_head);
-			return res;
+			return res->uid;
 		}
 	}
 
@@ -54,11 +61,25 @@ struct resource* resource_load(const char* filename)
 void resource_print(void)
 {
 	struct list_head *pos;
-	
+    
 	list_for_each(pos, &resource_loader_head)
 	{
 		struct resource_loader* tmp = list_entry(pos, struct resource_loader, list);
 
 		printf("Loader %s (%s) \n", tmp->name, tmp->ext);
 	}
+}
+
+struct resource* resource_get_by_uid(int uid)
+{
+	struct list_head *pos;
+	
+	list_for_each(pos, &resources_head)
+	{
+		struct resource* tmp = list_entry(pos, struct resource, list);
+		if(tmp->uid == uid)
+			return tmp;
+
+	}	
+	return NULL;
 }

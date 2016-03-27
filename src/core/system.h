@@ -15,7 +15,6 @@ struct system {
 	void* arg;
 	system_update_cb update;
 	system_init_cb init;	
-	system_alloc_cb alloc;
 	struct list_head next;
 	struct list_head components;
 	const char* name;
@@ -24,7 +23,6 @@ struct system {
 
 int system_register(struct system* sys);
 int system_init(void);
-void* system_alloc_component(int id, int size);
 int system_update(float dt);
 int system_get_id(const char* name);
 #endif /* ifndef __SYSTEM_H */

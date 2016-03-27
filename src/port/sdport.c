@@ -3,6 +3,7 @@
 #include "list.h"
 #include "window.h"
 #include "resources.h"
+#include "core_components.h"
 
 #include <SDL.h>
 
@@ -118,7 +119,15 @@ static struct resource* sdl_load_bmp(struct resource_loader* load, const char* p
 static int sdl_bmp_process(struct resource* res)
 {
 	struct sdl_img* img = container_of(res, struct sdl_img, res);
-	SDL_RenderCopy(img->vars->ren, img->tex, NULL, NULL);
+	struct transform_component* tf = (struct transform_component*)res->data;
+
+	SDL_Rect rect;
+	rect.x = (int)tf->x;
+	rect.y = (int)tf->y;
+	rect.h = (int)tf->h;
+        rect.w = (int)tf->w;	
+	float rot = tf->rot;
+	SDL_RenderCopyEx(img->vars->ren, img->tex, NULL, &rect, rot, NULL, (SDL_RendererFlip)0);
 
 	return 0;
 }

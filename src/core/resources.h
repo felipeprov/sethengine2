@@ -15,7 +15,9 @@ struct resource_loader;
 struct resource{
 	struct list_head list;
 	uint32_t type;
+	int uid;
 	struct resource_loader* loader;
+	void* data;
 };
 
 struct resource_loader
@@ -33,5 +35,6 @@ void resource_loader_register(struct resource_loader* loader);
 void resource_process(struct resource* res);
 struct resource* resource_load(const char* filename);
 void resource_print(void);
+struct resource* resource_get_by_uid(int uid);
 
 #endif
